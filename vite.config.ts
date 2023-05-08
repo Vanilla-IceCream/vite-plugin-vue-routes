@@ -9,7 +9,7 @@ export default defineConfig({
       formats: ['es', 'cjs'],
     },
     rollupOptions: {
-      external: ['glob'],
+      external: ['path', 'glob', '@vue-macros/common'],
     },
   },
   plugins: [dts()],

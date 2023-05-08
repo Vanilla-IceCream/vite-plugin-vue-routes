@@ -144,6 +144,71 @@ src/routes/(group)/bar/Registry.vue -> /bar
 src/routes/(home)/Registry.vue -> /
 ```
 
+## Macros
+
+The `defineRegistry` macro helps you quickly use layouts and middleware within `Registry.vue`.
+
+```vue
+<script lang="ts" setup>
+defineRegistry({
+  // ...
+});
+</script>
+```
+
+```ts
+// shims.d.ts
+interface RegistryOptions {
+  layout?: string;
+  middleware?: string[];
+}
+
+declare function defineRegistry(options?: RegistryOptions): void;
+```
+
 ### Layouts
 
+If you want to use `layouts/Default.vue`, you can do so without using `defineRegistry`.
+
+```vue
+<!-- src/routes/path/to/Registry.vue -->
+<script lang="ts" setup>
+defineRegistry({
+  layout: 'default',
+  // 'default' -> src/layouts/Default.vue
+  // 'foo' -> src/layouts/Foo.vue
+  // 'fooBar' -> src/layouts/FooBar.vue
+});
+</script>
+
+<template>
+  <div>Content</div>
+</template>
+```
+
+```vue
+<!-- src/layouts/Default.vue -->
+<template>
+  <div class="p-4">
+    <slot></slot>
+  </div>
+</template>
+```
+
 ### Middleware
+
+```vue
+<!-- src/routes/path/to/Registry.vue -->
+<script lang="ts" setup>
+defineRegistry({
+  middleware: ['auth'],
+});
+</script>
+```
+
+```ts
+// src/middleware/auth.ts
+export default (to, from) => {
+  return true;
+};
+```
