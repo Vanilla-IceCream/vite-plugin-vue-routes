@@ -1,0 +1,49 @@
+{
+  "name": "vite-plugin-vue-routes",
+  "version": "0.1.0",
+  "description": "File system based routing for Vue applications using Vite.",
+  "main": "./dist/vite-plugin-vue-routes.cjs",
+  "module": "./dist/vite-plugin-vue-routes.js",
+  "types": "./dist/vite-plugin-vue-routes.d.ts",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/vite-plugin-vue-routes.js",
+      "require": "./dist/vite-plugin-vue-routes.cjs"
+    }
+  },
+  "scripts": {
+    "build": "vite build",
+    "test": "vitest --run --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vanilla-IceCream/vite-plugin-vue-routes.git"
+  },
+  "keywords": [
+    "vite",
+    "vue",
+    "routing"
+  ],
+  "author": "Vanilla IceCream",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Vanilla-IceCream/vite-plugin-vue-routes/issues"
+  },
+  "homepage": "https://github.com/Vanilla-IceCream/vite-plugin-vue-routes#readme",
+  "dependencies": {
+    "glob": "^10.2.2"
+  },
+  "devDependencies": {
+    "@vitest/coverage-c8": "^0.31.0",
+    "ast-walker-scope": "^0.4.1",
+    "typescript": "^5.0.4",
+    "vite": "^4.3.5",
+    "vite-plugin-dts": "^2.3.0",
+    "vitest": "^0.31.0",
+    "vue": "^3.2.47"
+  }
+}
