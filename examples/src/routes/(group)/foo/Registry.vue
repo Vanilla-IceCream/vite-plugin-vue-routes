@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 defineRegistry({
   layout: 'pink',
-  middleware: ['auth'],
 });
 </script>
 

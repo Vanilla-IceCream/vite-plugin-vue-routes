@@ -209,6 +209,10 @@ defineRegistry({
 ```ts
 // src/middleware/auth.ts
 export default (to, from) => {
+  if (!localStorage.getItem('accessToken')) {
+    return { path: '/login' };
+  }
+
   return true;
 };
 ```
