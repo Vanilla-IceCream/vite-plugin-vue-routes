@@ -49,7 +49,7 @@ export default function vueRoutes(options?: PluginOptions): Plugin {
         walkAST(setupAst, {
           enter(node) {
             if (isCallOf(node, 'defineRegistry')) {
-              const match = code.match(/defineRegistry\(([\s\S]*?)\);/);
+              const match = code.match(/defineRegistry\(([\s\S]*?)\)/);
 
               const defineRegistryStr = match?.[1].trim();
               const defineRegistryObj = Function(`'use strict'; return (${defineRegistryStr})`)();

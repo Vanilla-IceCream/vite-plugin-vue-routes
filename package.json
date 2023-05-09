@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-vue-routes",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "File system based routing for Vue applications using Vite.",
   "main": "./dist/vite-plugin-vue-routes.cjs",
   "module": "./dist/vite-plugin-vue-routes.js",
