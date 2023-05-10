@@ -73,6 +73,11 @@ export default function vueRoutes(options?: PluginOptions): Plugin {
                   `<template>\n<Layout>$1</Layout>\n</template>`,
                 );
               } else if (!layout && middleware?.length) {
+                function hasTs(code: string) {
+                  const regex = /<script.*?(lang=("|')ts\2).*?>.*?<\/script>/gs;
+                  return regex.test(code);
+                }
+
                 s.overwriteNode(node, '', { offset });
 
                 let importMiddleware = '';
@@ -82,8 +87,10 @@ export default function vueRoutes(options?: PluginOptions): Plugin {
                   importMiddleware += `import ${middle} from '~/middleware/${middle}';`;
                 }
 
+                const scriptLang = hasTs(code) ? `<script lang="ts">` : '<script>';
+
                 s.prepend(`
-                  <script lang="ts">
+                  ${scriptLang}
                   ${importMiddleware}
 
                   export default {
@@ -101,6 +108,11 @@ export default function vueRoutes(options?: PluginOptions): Plugin {
                   return str.replace(/\w\S*/g, function (txt) {
                     return txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase();
                   });
+                }
+
+                function hasTs(code: string) {
+                  const regex = /<script.*?(lang=("|')ts\2).*?>.*?<\/script>/gs;
+                  return regex.test(code);
                 }
 
                 const layoutFileName = toTitleCase(layout);
@@ -121,8 +133,10 @@ export default function vueRoutes(options?: PluginOptions): Plugin {
                   importMiddleware += `import ${middle} from '~/middleware/${middle}';`;
                 }
 
+                const scriptLang = hasTs(code) ? `<script lang="ts">` : '<script>';
+
                 s.prepend(`
-                  <script lang="ts">
+                  ${scriptLang}
                   ${importMiddleware}
 
                   export default {

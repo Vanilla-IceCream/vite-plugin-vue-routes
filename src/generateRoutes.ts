@@ -1,15 +1,16 @@
+import path from 'path';
 import { glob } from 'glob';
 
 import type { PluginOptions } from './types';
 
 export default async function createRoutes(options?: PluginOptions) {
-  const dirs = options?.dirs || 'routes';
+  const dirs = options?.dirs || path.resolve(process.cwd(), 'src/routes');
 
-  const files = await glob(`src/${dirs}/**/Registry.vue`);
+  const files = await glob(`${dirs}/**/Registry.vue`);
 
   const paths = [...files]
     .map((file) => {
-      const match = file.match(new RegExp(`^src\\/${dirs}\\/(.*)\\/Registry\\.vue$`));
+      const match = file.match(new RegExp(`^${dirs}\\/(.*)\\/Registry\\.vue$`));
 
       if (match) {
         let path = '/' + match[1];
@@ -37,13 +38,9 @@ export default async function createRoutes(options?: PluginOptions) {
   const lines: string[] = [];
 
   files.forEach((item, index) => {
-    const mod = `import('${item.replace('src', '~')}')`;
+    const mod = `import('${item}')`;
     lines.push(`{ path: '${paths[index]}', component: () => ${mod} },`);
   });
 
-  return `
-    export default () => {
-      return [${lines.join('')}];
-    };
-  `;
+  return `export default () => [${lines.join('')}];`;
 }

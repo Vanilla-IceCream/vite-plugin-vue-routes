@@ -1,0 +1,9 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`generateRoutes 1`] = `
+"
+    export default () => {
+      return [{ path: '/products', component: () => import('/Users/shyam_chen/Documents/vite-plugin-vue-routes/examples/src/routes/products/Registry.vue') },{ path: '/hello-world', component: () => import('/Users/shyam_chen/Documents/vite-plugin-vue-routes/examples/src/routes/hello-world/Registry.vue') },{ path: '/', component: () => import('/Users/shyam_chen/Documents/vite-plugin-vue-routes/examples/src/routes/(home)/Registry.vue') },{ path: '/products/:id', component: () => import('/Users/shyam_chen/Documents/vite-plugin-vue-routes/examples/src/routes/products/[id]/Registry.vue') },{ path: '/blog/:info*', component: () => import('/Users/shyam_chen/Documents/vite-plugin-vue-routes/examples/src/routes/blog/[...info]/Registry.vue') },{ path: '/foo', component: () => import('/Users/shyam_chen/Documents/vite-plugin-vue-routes/examples/src/routes/(group)/foo/Registry.vue') },{ path: '/bar', component: () => import('/Users/shyam_chen/Documents/vite-plugin-vue-routes/examples/src/routes/(group)/bar/Registry.vue') },];
+    };
+  "
+`;
