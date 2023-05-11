@@ -1,3 +1,6 @@
 export interface PluginOptions {
-  dirs?: string;
+  /**
+   * Directory of the `routes`. Defaults to `src/routes`.
+   */
+  routesDir?: string;
 }
