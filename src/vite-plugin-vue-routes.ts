@@ -103,6 +103,17 @@ export default function vueRoutes(options?: PluginOptions): Plugin {
                   };
                   </script>
                 `);
+
+                if (code.includes('</script>')) {
+                  s.replace('</script>', `import Layout from '~/layouts/Default.vue';</script>`);
+                } else {
+                  s.prepend(`<script setup>import Layout from '~/layouts/Default.vue';</script>`);
+                }
+
+                s.replace(
+                  /<template>([\s\S]+)<\/template>/,
+                  `<template>\n<Layout>$1</Layout>\n</template>`,
+                );
               } else if (layout && middleware?.length) {
                 function toTitleCase(str: string) {
                   return str.replace(/\w\S*/g, function (txt) {

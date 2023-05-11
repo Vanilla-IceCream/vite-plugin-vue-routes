@@ -1,3 +1,3 @@
 <template>
-  <div>/products</div>
+  <h1>/products -> /products</h1>
 </template>

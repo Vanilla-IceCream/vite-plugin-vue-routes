@@ -6,5 +6,6 @@ defineRegistry({
 </script>
 
 <template>
-  <div>/</div>
+  <h1>/(home) -> /</h1>
+  <h2>{ layout: 'default', middleware: ['foo', 'bar'] }</h2>
 </template>

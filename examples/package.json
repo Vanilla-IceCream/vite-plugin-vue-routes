@@ -15,6 +15,7 @@
     "@vitejs/plugin-vue": "^4.2.1",
     "typescript": "^5.0.4",
     "vite": "^4.3.5",
-    "vite-plugin-vue-routes": "link:../"
+    "vite-plugin-vue-routes": "link:../",
+    "vitest": "^0.31.0"
   }
 }

@@ -5,5 +5,6 @@ defineRegistry({
 </script>
 
 <template>
-  <div>/bar</div>
+  <h1>/(group)/bar -> /bar</h1>
+  <h2>{ middleware: ['foo'] }</h2>
 </template>

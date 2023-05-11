@@ -46,13 +46,20 @@ Create a Vue application by defining `src/App.vue`:
 ```vue
 <template>
   <ul>
-    <li><RouterLink to="/">Home</RouterLink></li>
     <li><RouterLink to="/hello-world">/hello-world</RouterLink></li>
+    <li></li>
     <li><RouterLink to="/products">/products</RouterLink></li>
-    <li><RouterLink to="/products/123">/products/[id]</RouterLink></li>
-    <li><RouterLink to="/blog/title/date">/blog/[...info]</RouterLink></li>
+    <li><RouterLink to="/products/123">/products/[id] - /products/123</RouterLink></li>
+    <li></li>
+    <li><RouterLink to="/posts">/posts/[[title]] - /posts</RouterLink></li>
+    <li><RouterLink to="/posts/vue-routes">/posts/[[title]] - /posts/vue-routes</RouterLink></li>
+    <li></li>
+    <li><RouterLink to="/blog/vue/routes">/blog/[...info] - /blog/vue/routes</RouterLink></li>
+    <li></li>
     <li><RouterLink to="/foo">/(group)/foo</RouterLink></li>
     <li><RouterLink to="/bar">/(group)/bar</RouterLink></li>
+    <li></li>
+    <li><RouterLink to="/">/(home)</RouterLink></li>
   </ul>
 
   <RouterView />
@@ -92,7 +99,6 @@ const router = createRouter({
     {
       path: '/:pathMatch(.*)*',
       component: () => import('~/Error.vue'),
-      meta: { layout: 'empty' },
     },
   ],
   scrollBehavior(to, from, savedPosition) {
@@ -107,13 +113,21 @@ const router = createRouter({
 export default router;
 ```
 
+#### Type
+
+```diff
+// tsconfig.json
+  "types": [
+    // ...
++   "vite-plugin-vue-routes/client",
+  ],
+```
+
+or
+
 ```ts
-// shims.d.ts
-declare module 'virtual:vue-routes' {
-  import type { RouteRecordRaw } from 'vue-router';
-  const routes: () => RouteRecordRaw[];
-  export default routes;
-}
+// vite-env.d.ts
+/// <reference types="vite-plugin-vue-routes/client" />
 ```
 
 ### Define Routes

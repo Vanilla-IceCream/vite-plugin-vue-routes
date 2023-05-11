@@ -5,7 +5,7 @@ const route = useRoute();
 </script>
 
 <template>
-  <h1>/blog/[...info] -> /blog/:info*</h1>
+  <h1>/posts/[[title]] -> /posts/:title?</h1>
 
   <h2>
     route.params:

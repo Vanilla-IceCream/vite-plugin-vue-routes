@@ -5,5 +5,10 @@ const route = useRoute();
 </script>
 
 <template>
-  <div>/products/{{ route.params.id }}</div>
+  <h1>/products/[id] -> /products/:id</h1>
+
+  <h2>
+    route.params:
+    <pre>{{ route.params }}</pre>
+  </h2>
 </template>

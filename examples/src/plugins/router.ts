@@ -10,7 +10,6 @@ const router = createRouter({
     {
       path: '/:pathMatch(.*)*',
       component: () => import('~/Error.vue'),
-      meta: { layout: 'empty' },
     },
   ],
   scrollBehavior(to, from, savedPosition) {

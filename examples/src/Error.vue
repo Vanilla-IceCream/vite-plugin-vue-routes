@@ -1,3 +1,14 @@
+<script lang="ts" setup>
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+</script>
+
 <template>
-  <div>404</div>
+  <h1>Error.vue -> /:pathMatch(.*)*</h1>
+
+  <h2>
+    route.params:
+    <pre>{{ route.params }}</pre>
+  </h2>
 </template>
