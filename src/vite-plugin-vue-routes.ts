@@ -1,4 +1,5 @@
 import type { Plugin } from 'vite';
+import path from 'path';
 
 import type { PluginOptions } from './types';
 import generateRoutes from './generateRoutes';
@@ -20,12 +21,14 @@ export default function vueRoutes(options?: PluginOptions): Plugin {
       return null;
     },
     configureServer(server) {
-      server.watcher.on('add', async () => {
-        server.ws.send({ type: 'full-reload' });
+      server.watcher.on('add', async (filePath) => {
+        const fileExtension = path.basename(filePath);
+        if (fileExtension === 'Registry.vue') server.restart();
       });
 
-      server.watcher.on('unlink', async () => {
-        server.ws.send({ type: 'full-reload' });
+      server.watcher.on('unlink', async (filePath) => {
+        const fileExtension = path.basename(filePath);
+        if (fileExtension === 'Registry.vue') server.restart();
       });
     },
     async transform(code, id) {
