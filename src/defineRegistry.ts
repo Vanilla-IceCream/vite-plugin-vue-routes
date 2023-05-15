@@ -102,11 +102,13 @@ function injectMiddleware({ code, middleware, s }: Omit<Injector, 'layout'>) {
     ${importMiddleware}
 
     export default {
-      beforeRouteEnter(to, from) {
-        return [${middleware}].reduce((acc, func) => {
-          if (acc === true) return func(to, from);
-          return acc;
-        }, true);
+      async beforeRouteEnter(to, from) {
+        for (const func of [${middleware}]) {
+          const result = await func(to, from);
+          if (result !== true) return result;
+        }
+
+        return true;
       },
     };
     </script>
