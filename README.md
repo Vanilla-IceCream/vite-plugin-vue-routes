@@ -170,35 +170,9 @@ defineRegistry({
 </script>
 ```
 
-```ts
-// shims.d.ts
-interface RegistryOptions {
-  layout?: string;
-  middleware?: string[];
-}
-
-declare function defineRegistry(options?: RegistryOptions): void;
-```
-
 ### Layouts
 
-If you want to use `layouts/Default.vue`, you can do so without using `defineRegistry`.
-
-```vue
-<!-- src/routes/path/to/Registry.vue -->
-<script lang="ts" setup>
-defineRegistry({
-  layout: 'default',
-  // 'default' -> src/layouts/Default.vue
-  // 'foo' -> src/layouts/Foo.vue
-  // 'fooBar' -> src/layouts/FooBar.vue
-});
-</script>
-
-<template>
-  <div>Content</div>
-</template>
-```
+To enable the default layout, add a `~/layouts/Default.vue` file.
 
 ```vue
 <!-- src/layouts/Default.vue -->
@@ -209,24 +183,58 @@ defineRegistry({
 </template>
 ```
 
-### Middleware
+If `layouts/Default.vue` exists, `Registry.vue` will automatically utilize it.
+
+```vue
+<!-- src/routes/path/to/Registry.vue -->
+<template>
+  <div>Automatically use `layouts/Default.vue`.</div>
+</template>
+```
+
+By using the `layout` attribute, you can specify the desired layout.
 
 ```vue
 <!-- src/routes/path/to/Registry.vue -->
 <script lang="ts" setup>
 defineRegistry({
-  middleware: ['auth'],
+  layout: 'foo',
+  // 'foo' -> src/layouts/Foo.vue
+  // 'fooBar' -> src/layouts/FooBar.vue
+});
+</script>
+
+<template>
+  <div>Content</div>
+</template>
+```
+
+Please note that currently, the layout will be re-rendered when switching routes.
+Therefore, in order to preserve the layout's state, it is necessary to use state management.
+
+### Middleware
+
+Route middleware are navigation guards that receive the current route and the next route as arguments.
+
+```ts
+// src/middleware/foo.ts
+import type { NavigationGuard } from 'vue-router';
+
+export default (async (to, from, next) => {
+  return true;
+}) as NavigationGuard;
+```
+
+In the `Registry.vue` file, you can make a reference to this route middleware.
+
+```vue
+<!-- src/routes/path/to/Registry.vue -->
+<script lang="ts" setup>
+defineRegistry({
+  middleware: ['foo'],
+  // ['foo', 'bar', 'baz'] Serializing, starting with 'foo', then 'bar', and finally 'baz'.
 });
 </script>
 ```
 
-```ts
-// src/middleware/auth.ts
-export default (to, from) => {
-  if (!localStorage.getItem('accessToken')) {
-    return { path: '/login' };
-  }
-
-  return true;
-};
-```
+Please note that inline middleware is currently not supported.
