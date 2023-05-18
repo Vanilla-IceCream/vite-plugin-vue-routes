@@ -14,6 +14,9 @@
     <li><RouterLink to="/bar">/(group)/bar</RouterLink></li>
     <li></li>
     <li><RouterLink to="/">/(home)</RouterLink></li>
+    <li></li>
+    <li><RouterLink to="/inherits">/inherits</RouterLink></li>
+    <li><RouterLink to="/inherits/embed">/inherits/embed</RouterLink></li>
   </ul>
 
   <RouterView />

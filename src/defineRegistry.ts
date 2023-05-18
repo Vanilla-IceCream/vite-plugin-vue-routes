@@ -2,7 +2,7 @@ import path from 'path';
 import { glob } from 'glob';
 import { MagicString, getTransformResult, isCallOf, parseSFC, walkAST } from '@vue-macros/common';
 
-import { toTitleCase, hasTs } from './utils';
+import { capitalize, hasTs } from './utils';
 
 export default async (code: string, id: string) => {
   if (path.basename(id) !== 'Registry.vue') return;
@@ -40,8 +40,7 @@ export default async (code: string, id: string) => {
           const hasMiddlewareVal = !!middleware?.length;
 
           if (hasLayoutVal && !hasMiddlewareVal) {
-            const mod = `import Layout from '~/layouts/${toTitleCase(layout)}.vue'`;
-            s.overwriteNode(node, mod, { offset });
+            s.overwriteNode(node, '', { offset });
 
             injectLayout({ code, layout, s });
           }
@@ -54,8 +53,7 @@ export default async (code: string, id: string) => {
           }
 
           if (hasLayoutVal && hasMiddlewareVal) {
-            const mod = `import Layout from '~/layouts/${toTitleCase(layout)}.vue'`;
-            s.overwriteNode(node, mod, { offset });
+            s.overwriteNode(node, '', { offset });
 
             injectLayout({ code, layout, s });
             injectMiddleware({ code, middleware, s });
@@ -76,15 +74,46 @@ interface Injector {
 }
 
 function injectLayout({ code, layout, s }: Omit<Injector, 'middleware'>) {
-  if (layout === 'Default') {
-    if (code.includes('</script>')) {
-      s.replace('</script>', `import Layout from '~/layouts/Default.vue';</script>`);
-    } else {
-      s.prepend(`<script setup>import Layout from '~/layouts/Default.vue';</script>`);
-    }
+  const _layout = layout.split('@');
+
+  if (code.includes('</script>')) {
+    s.replace(
+      /<\/script>/i,
+      _layout
+        .map(
+          (layoutName) =>
+            `import ${capitalize(layoutName)}Layout from '~/layouts/${capitalize(
+              layoutName,
+            )}.vue';`,
+        )
+        .join('') + '</script>',
+    );
+  } else {
+    s.prepend(
+      '<script setup>' +
+        _layout
+          .map(
+            (layoutName) =>
+              `import ${capitalize(layoutName)}Layout from '~/layouts/${capitalize(
+                layoutName,
+              )}.vue';`,
+          )
+          .join('') +
+        '</script>',
+    );
   }
 
-  s.replace(/<template>([\s\S]+)<\/template>/, `<template>\n<Layout>$1</Layout>\n</template>`);
+  s.replace(
+    /<template>([\s\S]+)<\/template>/,
+    '<template>' +
+      _layout.map((layoutName) => `<${capitalize(layoutName)}Layout>`).join('') +
+      '$1' +
+      _layout
+        .reverse()
+        .map((layoutName) => `</${capitalize(layoutName)}Layout>`)
+        .join('') +
+      '</template>',
+  );
 }
 
 function injectMiddleware({ code, middleware, s }: Omit<Injector, 'layout'>) {

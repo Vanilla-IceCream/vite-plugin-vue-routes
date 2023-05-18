@@ -5,6 +5,6 @@ defineRegistry({
 </script>
 
 <template>
-  <h1>/(group)/foo -> /foo</h1>
+  <h1>/inherits -> /inherits</h1>
   <h2>{ layout: 'blue' }</h2>
 </template>

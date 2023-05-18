@@ -201,6 +201,7 @@ defineRegistry({
   layout: 'foo',
   // 'foo' -> src/layouts/Foo.vue
   // 'fooBar' -> src/layouts/FooBar.vue
+  // 'default@embed' -> inherits from src/layouts/Default.vue and uses src/layouts/Embed.vue
 });
 </script>
 
@@ -211,6 +212,12 @@ defineRegistry({
 
 Please note that currently, the layout will be re-rendered when switching routes.
 Therefore, in order to preserve the layout's state, it is necessary to use state management.
+
+As for libraries for state management, you can consider the following options:
+
+- `pinia`
+- `vue-storer`
+- `createInjectionState` in `@vueuse/shared`
 
 ### Middleware
 
