@@ -10,7 +10,7 @@ describe('plugin', () => {
     const plugin = vueRoutes();
     expect(plugin).toHaveProperty('name');
 
-    const plugin2 = vueRoutes({ dirs: 'pages' });
+    const plugin2 = vueRoutes({ routesDir: 'pages' });
     expect(plugin2).toHaveProperty('name');
   });
 });

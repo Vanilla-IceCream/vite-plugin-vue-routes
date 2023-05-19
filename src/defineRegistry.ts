@@ -12,12 +12,21 @@ export default async (code: string, id: string) => {
   const layouts = await glob(`src/layouts/*.vue`);
   const hasLayout = Boolean(layouts.length);
 
+  const middlewareFiles = await glob(`src/middleware/*.{ts,js}`);
+  const hasMiddleware = Boolean(middlewareFiles.length);
+
   if (!hasMacro && !hasLayout) return;
 
   const s = new MagicString(code);
 
   if (!hasMacro && hasLayout) {
     injectLayout({ code, layout: 'Default', s });
+
+    if (hasMiddleware) {
+      if (middlewareFiles.some((file) => path.basename(file).includes('default'))) {
+        injectMiddleware({ code, middleware: ['default'], s });
+      }
+    }
   }
 
   if (hasMacro) {
@@ -43,20 +52,39 @@ export default async (code: string, id: string) => {
             s.overwriteNode(node, '', { offset });
 
             injectLayout({ code, layout, s });
+
+            if (hasMiddleware) {
+              if (
+                middlewareFiles.some((file) =>
+                  path.basename(file.toLowerCase()).includes(layout.toLowerCase()),
+                )
+              ) {
+                injectMiddleware({ code, middleware: [layout], s });
+              }
+            }
           }
 
           if (!hasLayoutVal && hasMiddlewareVal) {
             s.overwriteNode(node, '', { offset });
 
             injectLayout({ code, layout: 'Default', s });
-            injectMiddleware({ code, middleware, s });
+            injectMiddleware({ code, middleware: ['default', ...middleware], s });
           }
 
           if (hasLayoutVal && hasMiddlewareVal) {
             s.overwriteNode(node, '', { offset });
 
             injectLayout({ code, layout, s });
-            injectMiddleware({ code, middleware, s });
+
+            if (
+              middlewareFiles.some((file) =>
+                path.basename(file.toLowerCase()).includes(layout.toLowerCase()),
+              )
+            ) {
+              injectMiddleware({ code, middleware: [layout, ...middleware], s });
+            } else {
+              injectMiddleware({ code, middleware, s });
+            }
           }
         }
       },
@@ -123,7 +151,7 @@ function injectMiddleware({ code, middleware, s }: Omit<Injector, 'layout'>) {
 
   for (let i = 0; i < middleware.length; i++) {
     const mod = middleware[i];
-    importMiddleware += `import ${mod} from '~/middleware/${mod}';`;
+    importMiddleware += `import ${mod}Middleware from '~/middleware/${mod}';`;
   }
 
   s.prepend(`
@@ -132,7 +160,7 @@ function injectMiddleware({ code, middleware, s }: Omit<Injector, 'layout'>) {
 
     export default {
       async beforeRouteEnter(to, from) {
-        for (const func of [${middleware}]) {
+        for (const func of [${middleware.map((m) => `${m}Middleware`)}]) {
           const result = await func(to, from);
           if (result !== true) return result;
         }

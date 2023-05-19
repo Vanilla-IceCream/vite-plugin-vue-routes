@@ -245,3 +245,28 @@ defineRegistry({
 ```
 
 Please note that inline middleware is currently not supported.
+
+#### Layout Level Middleware
+
+When Layout and Middleware have the same name regardless of case sensitivity, Layout will automatically use that Middleware.
+
+```coffee
+src/layouts/Foo.vue
+src/middleware/foo.ts
+```
+
+```vue
+<!-- src/routes/path/to/Registry.vue -->
+<script lang="ts" setup>
+defineRegistry({
+  layout: 'foo',
+});
+</script>
+```
+
+You can also give it to `layouts/Default.vue`.
+
+```coffee
+src/layouts/Default.vue
+src/middleware/default.ts
+```

@@ -17,6 +17,8 @@
     <li></li>
     <li><RouterLink to="/inherits">/inherits</RouterLink></li>
     <li><RouterLink to="/inherits/embed">/inherits/embed</RouterLink></li>
+    <li></li>
+    <li><RouterLink to="/dashboard">/dashboard (Layout Level Middleware)</RouterLink></li>
   </ul>
 
   <RouterView />
