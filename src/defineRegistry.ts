@@ -55,11 +55,11 @@ export default async (code: string, id: string) => {
 
             if (hasMiddleware) {
               if (
-                middlewareFiles.some((file) =>
-                  path.basename(file.toLowerCase()).includes(layout.toLowerCase()),
-                )
+                !!middlewareFiles.filter((file) =>
+                  layout.split('@').includes(path.parse(file).name.toLowerCase()),
+                ).length
               ) {
-                injectMiddleware({ code, middleware: [layout], s });
+                injectMiddleware({ code, middleware: [...layout.split('@')], s });
               }
             }
           }
@@ -77,11 +77,11 @@ export default async (code: string, id: string) => {
             injectLayout({ code, layout, s });
 
             if (
-              middlewareFiles.some((file) =>
-                path.basename(file.toLowerCase()).includes(layout.toLowerCase()),
-              )
+              !!middlewareFiles.filter((file) =>
+                layout.split('@').includes(path.parse(file).name.toLowerCase()),
+              ).length
             ) {
-              injectMiddleware({ code, middleware: [layout, ...middleware], s });
+              injectMiddleware({ code, middleware: [...layout.split('@'), ...middleware], s });
             } else {
               injectMiddleware({ code, middleware, s });
             }
