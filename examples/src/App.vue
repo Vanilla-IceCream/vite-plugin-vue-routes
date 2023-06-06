@@ -1,3 +1,7 @@
+<script lang="ts" setup>
+import Layout from 'virtual:vue-routes/Layout.vue';
+</script>
+
 <template>
   <ul>
     <li><RouterLink to="/hello-world">/hello-world</RouterLink></li>
@@ -19,7 +23,13 @@
     <li><RouterLink to="/inherits/embed">/inherits/embed</RouterLink></li>
     <li></li>
     <li><RouterLink to="/dashboard">/dashboard (Layout Level Middleware)</RouterLink></li>
+    <li></li>
+    <li><RouterLink to="/users/eduardo">/users/eduardo</RouterLink></li>
+    <li><RouterLink to="/users/eduardo/profile">/users/eduardo/profile</RouterLink></li>
+    <li><RouterLink to="/users/eduardo/posts">/users/eduardo/posts</RouterLink></li>
   </ul>
 
-  <RouterView />
+  <Layout>
+    <RouterView />
+  </Layout>
 </template>

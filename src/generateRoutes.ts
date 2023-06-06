@@ -1,3 +1,4 @@
+import fs from 'fs';
 import path from 'path';
 import { glob } from 'glob';
 
@@ -39,8 +40,37 @@ export default async (options?: PluginOptions) => {
 
   files.forEach((item, index) => {
     const mod = `import('${item}')`;
-    lines.push(`{ path: '${paths[index]}', component: () => ${mod} },`);
+
+    const file = fs.readFileSync(item, 'utf-8');
+
+    if (file.includes('<RouterView />')) {
+      lines.push(`{ path: '${paths[index]}', component: () => ${mod}, children: [] },`);
+    } else {
+      lines.push(`{ path: '${paths[index]}', component: () => ${mod} },`);
+    }
   });
 
-  return `export default () => [${lines.join('')}];`;
+  let hasMoves: string[] = [];
+
+  const routes = lines.map((route) => {
+    if (route.includes('children: []')) {
+      const path = route.match(/path: '(.*)',/)?.[1];
+
+      const children = lines.filter(
+        (r) => r.includes(`path: '${path}`) && !r.includes('children: []'),
+      );
+
+      hasMoves = [...hasMoves, ...children];
+
+      return route.replace('children: []', `children: [${children.join(' ')}]`);
+    }
+
+    if (hasMoves.includes(route)) {
+      return '';
+    }
+
+    return route;
+  });
+
+  return `export default () => [${routes.join('')}];`;
 };
