@@ -42,11 +42,27 @@ export default async (options?: PluginOptions) => {
     const mod = `import('${item}')`;
 
     const file = fs.readFileSync(item, 'utf-8');
+    const match = file.match(/defineRegistry\(([\s\S]*?)\)/);
+    const defineRegistryStr = match?.[1].trim();
+    const defineRegistryObj = Function(`'use strict'; return (${defineRegistryStr})`)();
+    const { layout } = JSON.parse(JSON.stringify(defineRegistryObj || {}));
 
     if (file.includes('<RouterView />')) {
-      lines.push(`{ path: '${paths[index]}', component: () => ${mod}, children: [] },`);
+      if (layout) {
+        lines.push(
+          `{ path: '${paths[index]}', component: () => ${mod}, children: [], meta: { layout: '${layout}' } },`,
+        );
+      } else {
+        lines.push(`{ path: '${paths[index]}', component: () => ${mod}, children: [] },`);
+      }
     } else {
-      lines.push(`{ path: '${paths[index]}', component: () => ${mod} },`);
+      if (layout) {
+        lines.push(
+          `{ path: '${paths[index]}', component: () => ${mod}, meta: { layout: '${layout}' } },`,
+        );
+      } else {
+        lines.push(`{ path: '${paths[index]}', component: () => ${mod} },`);
+      }
     }
   });
 
@@ -62,7 +78,8 @@ export default async (options?: PluginOptions) => {
 
       hasMoves = [...hasMoves, ...children];
 
-      return route.replace('children: []', `children: [${children.join(' ')}]`);
+      const shortcuts = children.map((c) => c.replace(new RegExp(`${path}/?`), ''));
+      return route.replace('children: []', `children: [${shortcuts.join(' ')}]`);
     }
 
     if (hasMoves.includes(route)) {
