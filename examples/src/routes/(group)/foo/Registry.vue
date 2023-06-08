@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 defineRegistry({
-  layout: 'blue',
+  layout: 'Blue',
 });
 </script>
 
 <template>
   <h1>/(group)/foo -> /foo</h1>
-  <h2>{ layout: 'blue' }</h2>
+  <h2>{ layout: 'Blue' }</h2>
 </template>

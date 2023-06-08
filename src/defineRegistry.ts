@@ -2,7 +2,7 @@ import path from 'path';
 import { glob } from 'glob';
 import { MagicString, getTransformResult, isCallOf, parseSFC, walkAST } from '@vue-macros/common';
 
-import { capitalize, hasTs } from './utils';
+import { hasTs } from './utils';
 
 export default async (code: string, id: string) => {
   if (path.basename(id) !== 'Registry.vue') return;
@@ -20,7 +20,7 @@ export default async (code: string, id: string) => {
   const s = new MagicString(code);
 
   if (!hasMacro && hasLayout) {
-    injectLayout({ code, layout: 'Default', s });
+    // injectLayout({ code, layout: 'Default', s });
 
     if (hasMiddleware) {
       if (middlewareFiles.some((file) => path.basename(file).includes('default'))) {
@@ -51,15 +51,15 @@ export default async (code: string, id: string) => {
           if (hasLayoutVal && !hasMiddlewareVal) {
             s.overwriteNode(node, '', { offset });
 
-            injectLayout({ code, layout, s });
+            // injectLayout({ code, layout, s });
 
             if (hasMiddleware) {
               if (
                 !!middlewareFiles.filter((file) =>
-                  layout.split('@').includes(path.parse(file).name.toLowerCase()),
+                  layout.toLowerCase().includes(path.parse(file).name.toLowerCase()),
                 ).length
               ) {
-                injectMiddleware({ code, middleware: [...layout.split('@')], s });
+                injectMiddleware({ code, middleware: [layout.toLowerCase()], s });
               }
             }
           }
@@ -67,24 +67,28 @@ export default async (code: string, id: string) => {
           if (!hasLayoutVal && hasMiddlewareVal) {
             s.overwriteNode(node, '', { offset });
 
-            injectLayout({ code, layout: 'Default', s });
+            // injectLayout({ code, layout: 'Default', s });
             injectMiddleware({ code, middleware: ['default', ...middleware], s });
           }
 
           if (hasLayoutVal && hasMiddlewareVal) {
             s.overwriteNode(node, '', { offset });
 
-            injectLayout({ code, layout, s });
+            // injectLayout({ code, layout, s });
 
             if (
               !!middlewareFiles.filter((file) =>
-                layout.split('@').includes(path.parse(file).name.toLowerCase()),
+                layout.toLowerCase().includes(path.parse(file).name.toLowerCase()),
               ).length
             ) {
-              injectMiddleware({ code, middleware: [...layout.split('@'), ...middleware], s });
+              injectMiddleware({ code, middleware: [layout.toLowerCase(), ...middleware], s });
             } else {
               injectMiddleware({ code, middleware, s });
             }
+          }
+
+          if (!hasLayoutVal && !hasMiddlewareVal) {
+            s.overwriteNode(node, '', { offset });
           }
         }
       },
@@ -101,48 +105,48 @@ interface Injector {
   s: MagicString;
 }
 
-function injectLayout({ code, layout, s }: Omit<Injector, 'middleware'>) {
-  const _layout = layout.split('@');
+// function injectLayout({ code, layout, s }: Omit<Injector, 'middleware'>) {
+//   const _layout = layout.split('@');
 
-  if (code.includes('</script>')) {
-    s.replace(
-      /<\/script>/i,
-      _layout
-        .map(
-          (layoutName) =>
-            `import ${capitalize(layoutName)}Layout from '~/layouts/${capitalize(
-              layoutName,
-            )}.vue';`,
-        )
-        .join('') + '</script>',
-    );
-  } else {
-    s.prepend(
-      '<script setup>' +
-        _layout
-          .map(
-            (layoutName) =>
-              `import ${capitalize(layoutName)}Layout from '~/layouts/${capitalize(
-                layoutName,
-              )}.vue';`,
-          )
-          .join('') +
-        '</script>',
-    );
-  }
+//   if (code.includes('</script>')) {
+//     s.replace(
+//       /<\/script>/i,
+//       _layout
+//         .map(
+//           (layoutName) =>
+//             `import ${capitalize(layoutName)}Layout from '~/layouts/${capitalize(
+//               layoutName,
+//             )}.vue';`,
+//         )
+//         .join('') + '</script>',
+//     );
+//   } else {
+//     s.prepend(
+//       '<script setup>' +
+//         _layout
+//           .map(
+//             (layoutName) =>
+//               `import ${capitalize(layoutName)}Layout from '~/layouts/${capitalize(
+//                 layoutName,
+//               )}.vue';`,
+//           )
+//           .join('') +
+//         '</script>',
+//     );
+//   }
 
-  s.replace(
-    /<template>([\s\S]+)<\/template>/,
-    '<template>' +
-      _layout.map((layoutName) => `<${capitalize(layoutName)}Layout>`).join('') +
-      '$1' +
-      _layout
-        .reverse()
-        .map((layoutName) => `</${capitalize(layoutName)}Layout>`)
-        .join('') +
-      '</template>',
-  );
-}
+//   s.replace(
+//     /<template>([\s\S]+)<\/template>/,
+//     '<template>' +
+//       _layout.map((layoutName) => `<${capitalize(layoutName)}Layout>`).join('') +
+//       '$1' +
+//       _layout
+//         .reverse()
+//         .map((layoutName) => `</${capitalize(layoutName)}Layout>`)
+//         .join('') +
+//       '</template>',
+//   );
+// }
 
 function injectMiddleware({ code, middleware, s }: Omit<Injector, 'layout'>) {
   const scriptLang = hasTs(code) ? `<script lang="ts">` : '<script>';

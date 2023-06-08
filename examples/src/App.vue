@@ -19,9 +19,6 @@ import Layout from 'virtual:vue-routes/Layout.vue';
     <li></li>
     <li><RouterLink to="/">/(home)</RouterLink></li>
     <li></li>
-    <li><RouterLink to="/inherits">/inherits</RouterLink></li>
-    <li><RouterLink to="/inherits/embed">/inherits/embed</RouterLink></li>
-    <li></li>
     <li><RouterLink to="/dashboard">/dashboard (Layout Level Middleware)</RouterLink></li>
     <li></li>
     <li><RouterLink to="/users/eduardo">/users/eduardo</RouterLink></li>

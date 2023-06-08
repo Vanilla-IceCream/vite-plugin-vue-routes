@@ -1,5 +1,6 @@
 import type { Plugin } from 'vite';
 import path from 'path';
+import { glob } from 'glob';
 
 import type { PluginOptions } from './types';
 import generateRoutes from './generateRoutes';
@@ -20,9 +21,35 @@ export default function vueRoutes(options?: PluginOptions): Plugin {
       }
 
       if (id === 'virtual:vue-routes/Layout.vue') {
+        const layouts = await glob(`src/layouts/*.vue`);
+
+        const asyncLayouts = layouts.map((layout) => {
+          const importName = path.basename(layout, '.vue');
+          const importPath = path.resolve(process.cwd(), layout);
+          return `${importName}: defineAsyncComponent(() => import('${importPath}')),`;
+        });
+
         return `
+          <script setup>
+          import { defineAsyncComponent, ref, watch } from 'vue';
+          import { useRoute } from 'vue-router';
+
+          const layout = ref();
+          const route = useRoute();
+
+          const layouts = { ${asyncLayouts.join('')} };
+
+          watch(
+            () => route.meta?.layout,
+            (val) => {
+              layout.value = layouts[val || 'Default']
+            },
+            { immediate: true },
+          );
+          </script>
+
           <template>
-            <slot></slot>
+            <component :is="layout"><slot></slot></component>
           </template>
         `;
       }

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 defineRegistry({
-  layout: 'violet',
+  layout: 'Violet',
 });
 </script>
 

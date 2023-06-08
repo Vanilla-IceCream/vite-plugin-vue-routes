@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 defineRegistry({
-  middleware: ['foo'],
+  middleware: ['bar'],
 });
 </script>
 
 <template>
   <h1>/(group)/bar -> /bar</h1>
-  <h2>{ middleware: ['foo'] }</h2>
+  <h2>{ middleware: ['bar'] }</h2>
 </template>
