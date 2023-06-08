@@ -31,7 +31,7 @@ export default function vueRoutes(options?: PluginOptions): Plugin {
 
         return `
           <script setup>
-          import { defineAsyncComponent, ref, watch } from 'vue';
+          import { defineAsyncComponent, ref, watch, markRaw } from 'vue';
           import { useRoute } from 'vue-router';
 
           const layout = ref();
@@ -42,7 +42,7 @@ export default function vueRoutes(options?: PluginOptions): Plugin {
           watch(
             () => route.meta?.layout,
             (val) => {
-              layout.value = layouts[val || 'Default']
+              layout.value = markRaw(layouts[val || 'Default']);
             },
             { immediate: true },
           );
