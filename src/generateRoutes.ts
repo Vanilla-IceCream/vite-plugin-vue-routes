@@ -53,7 +53,7 @@ export default async (options?: PluginOptions) => {
           `{ path: '${paths[index]}', component: () => ${mod}, children: [], meta: { layout: '${layout}' } },`,
         );
       } else {
-        lines.push(`{ path: '${paths[index]}', component: () => ${mod}, children: [] },`);
+        lines.push(`{ path: '${paths[index]}', component: () => ${mod}, children: [], meta: { layout: 'Default' } },`);
       }
     } else {
       if (layout) {
@@ -61,7 +61,7 @@ export default async (options?: PluginOptions) => {
           `{ path: '${paths[index]}', component: () => ${mod}, meta: { layout: '${layout}' } },`,
         );
       } else {
-        lines.push(`{ path: '${paths[index]}', component: () => ${mod} },`);
+        lines.push(`{ path: '${paths[index]}', component: () => ${mod}, meta: { layout: 'Default' } },`);
       }
     }
   });

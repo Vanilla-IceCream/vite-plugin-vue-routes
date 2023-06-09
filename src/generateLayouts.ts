@@ -12,18 +12,21 @@ export default async () => {
 
   return `
     <script setup>
-    import { defineAsyncComponent, ref, watch, markRaw } from 'vue';
+    import { defineComponent, defineAsyncComponent, ref, watch, markRaw, h } from 'vue';
     import { useRoute } from 'vue-router';
 
     const layout = ref();
     const route = useRoute();
 
-    const layouts = { ${asyncLayouts.join('')} };
+    const layouts = {
+      __Placeholder: defineComponent(() => () => h('div')),
+      ${asyncLayouts.join('')}
+    };
 
     watch(
       () => route.meta?.layout,
       (val) => {
-        layout.value = markRaw(layouts[val || 'Default']);
+        layout.value = markRaw(layouts[val || '__Placeholder']);
       },
       { immediate: true },
     );
