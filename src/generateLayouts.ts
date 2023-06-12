@@ -12,14 +12,15 @@ export default async () => {
 
   return `
     <script setup>
-    import { defineComponent, defineAsyncComponent, ref, watch, markRaw, h } from 'vue';
+    import { defineComponent, defineAsyncComponent, ref, watch, markRaw, useSlots, h } from 'vue';
     import { useRoute } from 'vue-router';
 
     const layout = ref();
+    const slots = useSlots();
     const route = useRoute();
 
     const layouts = {
-      __Placeholder: defineComponent(() => () => h('div')),
+      __Placeholder: defineComponent(() => () => h('div', slots.default())),
       ${asyncLayouts.join('')}
     };
 

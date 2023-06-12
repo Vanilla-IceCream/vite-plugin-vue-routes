@@ -24,6 +24,8 @@ import Layout from 'virtual:vue-routes/Layout.vue';
     <li><RouterLink to="/users/eduardo">/users/eduardo</RouterLink></li>
     <li><RouterLink to="/users/eduardo/profile">/users/eduardo/profile</RouterLink></li>
     <li><RouterLink to="/users/eduardo/posts">/users/eduardo/posts</RouterLink></li>
+    <li></li>
+    <li><RouterLink to="/foo/bar/baz">404</RouterLink></li>
   </ul>
 
   <Layout>

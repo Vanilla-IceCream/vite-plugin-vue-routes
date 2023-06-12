@@ -28,13 +28,17 @@ export default function vueRoutes(options?: PluginOptions): Plugin {
     },
     configureServer(server) {
       server.watcher.on('add', async (filePath) => {
-        const fileExtension = path.basename(filePath);
-        if (fileExtension === 'Registry.vue') server.restart();
+        const isRegistryFile = path.basename(filePath) === 'Registry.vue';
+        const isLayoutsDir = path.dirname(filePath).includes('src/layouts');
+        const isMiddlewareDir = path.dirname(filePath).includes('src/middleware');
+        if (isRegistryFile || isLayoutsDir || isMiddlewareDir) server.restart();
       });
 
       server.watcher.on('unlink', async (filePath) => {
-        const fileExtension = path.basename(filePath);
-        if (fileExtension === 'Registry.vue') server.restart();
+        const isRegistryFile = path.basename(filePath) === 'Registry.vue';
+        const isLayoutsDir = path.dirname(filePath).includes('src/layouts');
+        const isMiddlewareDir = path.dirname(filePath).includes('src/middleware');
+        if (isRegistryFile || isLayoutsDir || isMiddlewareDir) server.restart();
       });
     },
     async transform(code, id) {
