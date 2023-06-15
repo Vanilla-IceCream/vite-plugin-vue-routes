@@ -4,6 +4,12 @@ declare module 'virtual:vue-routes' {
   export default routes;
 }
 
+declare module 'virtual:vue-routes/Layout.vue' {
+  import type { DefineComponent } from 'vue';
+  const Layout: DefineComponent<{}, {}, any>;
+  export default Layout;
+}
+
 interface RegistryOptions {
   layout?: string;
   middleware?: string[];
