@@ -12,18 +12,14 @@ export default function vueRoutes(options?: PluginOptions): Plugin {
     enforce: 'pre',
     resolveId(source) {
       if (source === 'virtual:vue-routes') return source;
+      if (source === 'virtual:vue-routes/Layout') return source;
       if (source === 'virtual:vue-routes/Layout.vue') return source;
       return null;
     },
     async load(id) {
-      if (id === 'virtual:vue-routes') {
-        return generateRoutes(options);
-      }
-
-      if (id === 'virtual:vue-routes/Layout.vue') {
-        return generateLayouts();
-      }
-
+      if (id === 'virtual:vue-routes') return generateRoutes(options);
+      if (id === 'virtual:vue-routes/Layout') return generateLayouts();
+      if (id === 'virtual:vue-routes/Layout.vue') return generateLayouts(true);
       return null;
     },
     configureServer(server) {
