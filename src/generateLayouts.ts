@@ -68,7 +68,7 @@ export default async (useSfc = false) => {
         };
       },
       render() {
-        return h(this.layout, {}, this.$slots.default());
+        return h(this.layout, {}, () => this.$slots.default());
       },
     });
   `;
