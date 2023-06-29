@@ -14,6 +14,7 @@ export default defineConfig({
   },
   plugins: [dts()],
   test: {
+    globals: true,
     testTimeout: 10_000,
   },
 });

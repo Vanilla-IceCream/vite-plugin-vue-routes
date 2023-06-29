@@ -1,10 +1,12 @@
-import path from 'path';
+import { resolve } from 'path';
 import { test, expect } from 'vitest';
 
 import generateRoutes from '../generateRoutes';
 
 test('generateRoutes', async () => {
-  const funcStr = await generateRoutes({ routesDir: path.resolve(__dirname, '../../examples/src/routes') });
+  const routesDir = resolve(__dirname, '../../examples/src/routes');
+  const generated = await generateRoutes({ routesDir });
 
-  expect(funcStr).toMatchSnapshot();
+  const routes = generated.replace(new RegExp(routesDir, 'g'), '~/routes');
+  expect(routes).toMatchSnapshot();
 });

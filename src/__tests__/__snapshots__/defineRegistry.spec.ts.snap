@@ -1,0 +1,129 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`defineRegistry - layout 1`] = `
+{
+  "code": "
+    <script lang=\\"ts\\" setup>
+    ;
+    </script>
+
+    <template>
+      <div>Violet</div>
+    </template>
+  ",
+  "map": SourceMap {
+    "file": undefined,
+    "mappings": "AAAA;AACA,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AAC5B,CAAC,CAAC,CAAC,CAEG,CAAC;AACP,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AACb;AACA,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AACd,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AACvB,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AACf,CAAC",
+    "names": [],
+    "sources": [
+      "Registry.vue",
+    ],
+    "sourcesContent": [
+      "
+    <script lang=\\"ts\\" setup>
+    defineRegistry({
+      layout: 'Violet',
+    });
+    </script>
+
+    <template>
+      <div>Violet</div>
+    </template>
+  ",
+    ],
+    "version": 3,
+  },
+}
+`;
+
+exports[`defineRegistry - middleware 1`] = `
+{
+  "code": "
+    <script lang=\\"ts\\">
+    import defaultMiddleware from '~/middleware/default';import violetMiddleware from '~/middleware/violet';
+
+    export default {
+      async beforeRouteEnter(to, from) {
+        for (const func of [defaultMiddleware,violetMiddleware]) {
+          const result = await func(to, from);
+          if (result !== true) return result;
+        }
+
+        return true;
+      },
+    };
+    </script>
+  
+    <script lang=\\"ts\\" setup>
+    ;
+    </script>
+
+    <template>
+      <div>Violet</div>
+    </template>
+  ",
+  "map": SourceMap {
+    "file": undefined,
+    "mappings": ";;;;;;;;;;;;;;;EAAA;AACA,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AAC5B,CAAC,CAAC,CAAC,CAEG,CAAC;AACP,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AACb;AACA,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AACd,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AACvB,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AACf,CAAC",
+    "names": [],
+    "sources": [
+      "Registry.vue",
+    ],
+    "sourcesContent": [
+      "
+    <script lang=\\"ts\\" setup>
+    defineRegistry({
+      middleware: ['violet'],
+    });
+    </script>
+
+    <template>
+      <div>Violet</div>
+    </template>
+  ",
+    ],
+    "version": 3,
+  },
+}
+`;
+
+exports[`defineRegistry 1`] = `
+{
+  "code": "
+    <script>
+    import defaultMiddleware from '~/middleware/default';
+
+    export default {
+      async beforeRouteEnter(to, from) {
+        for (const func of [defaultMiddleware]) {
+          const result = await func(to, from);
+          if (result !== true) return result;
+        }
+
+        return true;
+      },
+    };
+    </script>
+  
+    <template>
+      <div>Default</div>
+    </template>
+  ",
+  "map": SourceMap {
+    "file": undefined,
+    "mappings": ";;;;;;;;;;;;;;;EAAA;AACA,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AACd,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AACxB,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AACf,CAAC",
+    "names": [],
+    "sources": [
+      "Registry.vue",
+    ],
+    "sourcesContent": [
+      "
+    <template>
+      <div>Default</div>
+    </template>
+  ",
+    ],
+    "version": 3,
+  },
+}
+`;
