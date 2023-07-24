@@ -1,6 +1,6 @@
 import { resolve } from 'path';
 import { glob } from 'glob';
-import { maxBy } from 'lodash';
+import maxBy from 'lodash.maxby';
 
 import type { PluginOptions } from './types';
 

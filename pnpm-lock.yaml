@@ -8,14 +8,14 @@ dependencies:
   glob:
     specifier: ^10.3.3
     version: 10.3.3
-  lodash:
-    specifier: ^4.17.21
-    version: 4.17.21
+  lodash.maxby:
+    specifier: ^4.6.0
+    version: 4.6.0
 
 devDependencies:
-  '@types/lodash':
-    specifier: ^4.14.195
-    version: 4.14.195
+  '@types/lodash.maxby':
+    specifier: ^4.6.7
+    version: 4.6.7
   '@vitejs/plugin-vue':
     specifier: ^4.2.3
     version: 4.2.3(vite@4.4.6)(vue@3.3.4)
@@ -456,6 +456,12 @@ packages:
 
   /@types/istanbul-lib-coverage@2.0.4:
     resolution: {integrity: sha512-z/QT1XN4K4KYuslS23k62yDIDLwLFkzxOuMplDtObz0+y7VqJCaO2o+SPwHCvLFZh7xazvvoor2tA/hPz9ee7g==}
+    dev: true
+
+  /@types/lodash.maxby@4.6.7:
+    resolution: {integrity: sha512-IEAUqiNm6L+dKSAx1StBfl+EUT3kMoLKDslTOxzkTlb2HYldIqcQOgavuRdqlTI2yKzSVRZM2ZZbRvKuEpaQaQ==}
+    dependencies:
+      '@types/lodash': 4.14.195
     dev: true
 
   /@types/lodash@4.14.195:
@@ -1078,8 +1084,13 @@ packages:
     resolution: {integrity: sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==}
     dev: true
 
+  /lodash.maxby@4.6.0:
+    resolution: {integrity: sha512-QfTqQTwzmKxLy7VZlbx2M/ipWv8DCQ2F5BI/MRxLharOQ5V78yMSuB+JE+EuUM22txYfj09R2Q7hUlEYj7KdNg==}
+    dev: false
+
   /lodash@4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
+    dev: true
 
   /loupe@2.3.6:
     resolution: {integrity: sha512-RaPMZKiMy8/JruncMU5Bt6na1eftNoo++R4Y+N2FrxkDVTrGvcyzFTsaGif4QTeKESheMGegbhw6iUAq+5A8zA==}
