@@ -1,7 +1,3 @@
-<script lang="ts" setup>
-import Layout from 'virtual:vue-routes/Layout';
-</script>
-
 <template>
   <ul>
     <li><RouterLink to="/hello-world">/hello-world</RouterLink></li>
@@ -28,7 +24,5 @@ import Layout from 'virtual:vue-routes/Layout';
     <li><RouterLink to="/foo/bar/baz">404</RouterLink></li>
   </ul>
 
-  <Layout>
-    <RouterView />
-  </Layout>
+  <RouterView />
 </template>

@@ -1,6 +1,8 @@
 # vite-plugin-vue-routes
 
-File system based routing for Vue applications using Vite.
+File-based routing for Vue applications using Vite.
+
+This branch refers to the vite-plugin-vue-routes v1 release. Check out the v0 branch for v0.
 
 ## Installation
 
@@ -80,10 +82,10 @@ import routes from 'virtual:vue-routes';
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    ...routes(),
+    ...routes,
 
     {
-      path: '/:pathMatch(.*)*',
+      path: '/:slug(.*)*',
       component: () => import('~/Error.vue'),
     },
   ],
@@ -101,16 +103,6 @@ export default router;
 
 #### Type
 
-```diff
-// tsconfig.json
-  "types": [
-    // ...
-+   "vite-plugin-vue-routes/client",
-  ],
-```
-
-or
-
 ```ts
 // vite-env.d.ts
 /// <reference types="vite-plugin-vue-routes/client" />
@@ -120,8 +112,8 @@ or
 
 Define routes by creating files in the `src/routes` directory:
 
-```
-src/routes/path/to/Registry.vue
+```coffee
+src/routes/path/to/+page.vue
 ```
 
 ### Route File Naming Convention
@@ -129,19 +121,36 @@ src/routes/path/to/Registry.vue
 The file naming convention for the routes is as follows:
 
 ```coffee
-src/routes/hello-world/Registry.vue -> /hello-world
+src/routes/hello-world/+page.vue -> /hello-world
 
-src/routes/products/Registry.vue -> /products
-src/routes/products/[id]/Registry.vue -> /products/:id
+src/routes/products/+page.vue -> /products
+src/routes/products/[id]/+page.vue -> /products/:id
 
-src/routes/posts/[[title]]/Registry.vue -> /posts/:title?
+src/routes/posts/[[title]]/+page.vue -> /posts/:title?
 
-src/routes/blog/[...info]/Registry.vue -> /blog/:info*
+src/routes/blog/[...info]/+page.vue -> /blog/:info*
 
-src/routes/(group)/foo/Registry.vue -> /foo
-src/routes/(group)/bar/Registry.vue -> /bar
+src/routes/(group)/foo/+page.vue -> /foo
+src/routes/(group)/bar/+page.vue -> /bar
 
-src/routes/(home)/Registry.vue -> /
+src/routes/(home)/+page.vue -> /
+```
+
+## Define Layouts
+
+```coffee
+src/routes/path/to/+layout.vue
+```
+
+### Layout File Naming Convention
+
+```ts
+src/routes/+layout.vue -> /+
+
+src/routes/(dashboard)/+layout.vue -> /+
+src/routes/(marketing)/+layout.vue -> /+
+
+src/routes/users/[username]/+layout.vue -> /users/:username/+
 ```
 
 ## Documentation

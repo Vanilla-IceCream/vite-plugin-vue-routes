@@ -1,93 +1,143 @@
-import fs from 'fs';
-import path from 'path';
+import { resolve } from 'path';
 import { glob } from 'glob';
+import { maxBy } from 'lodash';
 
 import type { PluginOptions } from './types';
 
 export default async (options?: PluginOptions) => {
-  const routesDir = options?.routesDir || path.resolve(process.cwd(), 'src/routes');
+  const routesDir = options?.routesDir || resolve(process.cwd(), 'src/routes');
 
-  const files = await glob(`${routesDir}/**/Registry.vue`);
+  const files = await glob(`${routesDir}/**/+{page,layout}.vue`);
 
-  const paths = [...files]
-    .map((file) => {
-      const match = file.match(new RegExp(`^${routesDir}\\/(.*)\\/Registry\\.vue$`));
+  const routes = [] as Array<any>;
+  const hasRootLayout = files.includes(`${routesDir}/+layout.vue`);
 
-      if (match) {
-        let path = '/' + match[1];
+  files.forEach((item) => {
+    let level = 0;
 
-        // /(group) ->
-        path = path.replace(/\/\(.+?\)/g, '');
-        if (!path) path += '/';
+    if (hasRootLayout) {
+      level += 1;
+    }
 
-        // /[...rest] -> /:rest*
-        path = path.replace(/\[\.\.\.([^\]]+)\]/g, ':$1*');
+    const key = item
+      .replace(`${routesDir}`, '')
+      .replace('+layout.vue', '')
+      .replace('+page.vue', '')
+      .split('/')
+      .filter(Boolean)
+      .join('/');
 
-        // /[[id]] -> /:id?
-        path = path.replace(/\[\[(.+?)\]\]/g, ':$1?');
+    let path = item.replace(`${routesDir}`, '').replace('layout.vue', '').replace('/+page.vue', '');
 
-        // /[id] -> /:id
-        path = path.replace(/\[(.+?)\]/g, ':$1');
+    // /(group) ->
+    path = path.replace(/\/\(.+?\)/g, '');
+    if (!path) path += '/';
 
-        return path;
-      }
+    // /[...rest] -> /:rest*
+    path = path.replace(/\[\.\.\.([^\]]+)\]/g, ':$1*');
 
-      return null;
-    })
-    .filter(Boolean);
+    // /[[id]] -> /:id?
+    path = path.replace(/\[\[(.+?)\]\]/g, ':$1?');
 
-  const lines: string[] = [];
+    // /[id] -> /:id
+    path = path.replace(/\[(.+?)\]/g, ':$1');
 
-  files.forEach((item, index) => {
-    const mod = `import('${item}')`;
+    const component = `() => import('${item}')`;
 
-    const file = fs.readFileSync(item, 'utf-8');
-    const match = file.match(/defineRegistry\(([\s\S]*?)\)/);
-    const defineRegistryStr = match?.[1].trim();
-    const defineRegistryObj = Function(`'use strict'; return (${defineRegistryStr})`)();
-    const { layout } = JSON.parse(JSON.stringify(defineRegistryObj || {}));
-
-    if (file.includes('<RouterView />')) {
-      if (layout) {
-        lines.push(
-          `{ path: '${paths[index]}', component: () => ${mod}, children: [], meta: { layout: '${layout}' } },`,
-        );
-      } else {
-        lines.push(`{ path: '${paths[index]}', component: () => ${mod}, children: [], meta: { layout: 'Default' } },`);
-      }
+    if (path.includes('/+')) {
+      routes.push({ route: { path, component, children: [] }, level, key });
     } else {
-      if (layout) {
-        lines.push(
-          `{ path: '${paths[index]}', component: () => ${mod}, meta: { layout: '${layout}' } },`,
-        );
-      } else {
-        lines.push(`{ path: '${paths[index]}', component: () => ${mod}, meta: { layout: 'Default' } },`);
+      routes.push({ route: { path, component }, level, key });
+    }
+  });
+
+  // level -> 2 (layout)
+  routes.forEach((r) => {
+    if (r.key && Array.isArray(r.route.children)) {
+      r.level += 1;
+    }
+  });
+
+  // level -> 3 (layout)
+  routes.forEach((r) => {
+    if (r.key && Array.isArray(r.route.children)) {
+      const plus = routes
+        .filter((_r) => _r.key && _r.route.children && _r.key !== r.key)
+        .find((_r) => r.key.startsWith(_r.key));
+
+      if (plus) {
+        r.level += 1;
       }
     }
   });
 
-  let hasMoves: string[] = [];
-
-  const routes = lines.map((route) => {
-    if (route.includes('children: []')) {
-      const path = route.match(/path: '(.*)',/)?.[1];
-
-      const children = lines.filter(
-        (r) => r.includes(`path: '${path}`) && !r.includes('children: []'),
-      );
-
-      hasMoves = [...hasMoves, ...children];
-
-      const shortcuts = children.map((c) => c.replace(new RegExp(`${path}/?`), ''));
-      return route.replace('children: []', `children: [${shortcuts.join(' ')}]`);
+  routes.forEach((r) => {
+    if (r.key && !Array.isArray(r.route.children)) {
+      routes
+        .filter((_r) => _r.key && Array.isArray(_r.route.children))
+        .forEach((_rr) => {
+          if (r.key.startsWith(_rr.key)) {
+            r.level += 1;
+          }
+        });
     }
-
-    if (hasMoves.includes(route)) {
-      return '';
-    }
-
-    return route;
   });
 
-  return `export default () => [${routes.join('')}];`;
+  function createRoutes(routes: any[], level = 0, curArr: any = [], curKeysArr: any = []) {
+    const arr = [] as any;
+    const keysArr = [] as any;
+
+    const layouts = routes.filter((r) => Array.isArray(r.route.children));
+
+    let maxLevelOfLayouts = 0;
+
+    if (layouts.length) {
+      maxLevelOfLayouts = maxBy(layouts, (item: any) => item.level).level - level;
+    } else {
+      return routes.map((r) => r.route);
+    }
+
+    if (maxLevelOfLayouts === 0) {
+      if (!hasRootLayout) {
+        const rootRoutes = routes.filter((r) => r.level === 0).map((r) => r.route);
+        return [...rootRoutes, ...curArr];
+      }
+
+      return curArr;
+    }
+
+    const layoutsMaxLevel = layouts.filter((l) => l.level === maxLevelOfLayouts);
+
+    for (let i = 0; i < layoutsMaxLevel.length; i++) {
+      const layout = layoutsMaxLevel[i];
+
+      const cur = {} as any;
+      cur.path = layout.route.path;
+      cur.component = layout.route.component;
+
+      if (curKeysArr.join(',').includes(layout.key)) {
+        const sameLayer = routes
+          .filter(
+            (r) => r.key.includes(layout.key) && !r.route.children && r.level === maxLevelOfLayouts,
+          )
+          .map((r) => r.route);
+
+        cur.children = [...curArr, ...sameLayer];
+      } else {
+        cur.children = routes
+          .filter((r) => r.key.includes(layout.key) && !r.route.children)
+          .map((r) => r.route);
+      }
+
+      arr.push(cur);
+      keysArr.push(layout.key);
+    }
+
+    return createRoutes(routes, level + 1, arr, keysArr);
+  }
+
+  const _routes = JSON.stringify(createRoutes(routes), null, 2);
+  const converted = _routes.replace(/"\(\) => import\(/g, '() => import(').replace(/\)"/g, ')');
+
+  return `export default ${converted};`;
 };
