@@ -1,3 +1,6 @@
 <template>
-  <h1>Admin Page</h1>
+  <fieldset>
+    <legend>/(app)/admin/+page.vue</legend>
+    <p>Admin Page</p>
+  </fieldset>
 </template>

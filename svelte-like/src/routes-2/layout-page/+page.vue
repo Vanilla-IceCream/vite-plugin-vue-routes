@@ -2,6 +2,6 @@
   <fieldset>
     <legend>/layout-page/+page.vue</legend>
 
-    <p>Page View</p>
+    <div>Page View</div>
   </fieldset>
 </template>

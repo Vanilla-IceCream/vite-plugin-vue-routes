@@ -1,7 +1,6 @@
 <template>
-  <fieldset>
-    <legend>/users/[username]/+layout.vue</legend>
+  <div class="user">
     <h2>User {{ $route.params.username }}</h2>
     <RouterView />
-  </fieldset>
+  </div>
 </template>

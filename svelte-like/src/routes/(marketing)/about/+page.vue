@@ -1,3 +1,6 @@
 <template>
-  <h1>About Page</h1>
+  <fieldset>
+    <legend>/(marketing)/about/+page.vue</legend>
+    <p>About Page</p>
+  </fieldset>
 </template>

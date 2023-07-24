@@ -1,6 +1,6 @@
 <template>
   <fieldset>
-    <legend>/layout-page/+layout.vue</legend>
+    <legend>/layout-page/+layout</legend>
 
     <RouterView />
   </fieldset>

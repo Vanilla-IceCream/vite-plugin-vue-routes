@@ -1,3 +1,6 @@
 <template>
-  <h1>Home Page</h1>
+  <fieldset>
+    <legend>/(marketing)/(home)/+page.vue</legend>
+    <p>Home Page</p>
+  </fieldset>
 </template>
