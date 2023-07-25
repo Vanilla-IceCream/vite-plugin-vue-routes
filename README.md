@@ -2,7 +2,7 @@
 
 File-based routing for Vue applications using Vite.
 
-This branch refers to the vite-plugin-vue-routes v1 release. Check out the v0 branch for v0.
+This branch refers to the vite-plugin-vue-routes v1 release. Check out the [v0](https://github.com/Vanilla-IceCream/vite-plugin-vue-routes/tree/v0) branch for v0.
 
 ## Installation
 

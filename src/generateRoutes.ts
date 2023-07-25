@@ -51,28 +51,8 @@ export default async (options?: PluginOptions) => {
     }
   });
 
-  // level -> 2 (layout)
   routes.forEach((r) => {
-    if (r.key && Array.isArray(r.route.children)) {
-      r.level += 1;
-    }
-  });
-
-  // level -> 3 (layout)
-  routes.forEach((r) => {
-    if (r.key && Array.isArray(r.route.children)) {
-      const plus = routes
-        .filter((_r) => _r.key && _r.route.children && _r.key !== r.key)
-        .find((_r) => r.key.startsWith(_r.key));
-
-      if (plus) {
-        r.level += 1;
-      }
-    }
-  });
-
-  routes.forEach((r) => {
-    if (r.key && !Array.isArray(r.route.children)) {
+    if (r.key) {
       routes
         .filter((_r) => _r.key && Array.isArray(_r.route.children))
         .forEach((_rr) => {
