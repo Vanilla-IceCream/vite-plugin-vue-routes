@@ -34,7 +34,7 @@ import vueRoutes from 'vite-plugin-vue-routes';
 export default defineConfig({
   plugins: [
     vue(),
-    vueRoutes(), // Default: { routesDir: <rootDir>/src/routes }
+    vueRoutes(), // Default: { routesDir: '<rootDir>/src/routes' }
   ],
   resolve: {
     alias: {
@@ -138,13 +138,22 @@ src/routes/(home)/+page.vue -> /
 
 ## Define Layouts
 
+Define a layout by creating files in the `src/routes` directory:
+
 ```coffee
 src/routes/path/to/+layout.vue
 ```
 
+```vue
+<!-- src/routes/path/to/+layout.vue -->
+<template>
+  <RouterView />
+</template>
+```
+
 ### Layout File Naming Convention
 
-```ts
+```coffee
 src/routes/+layout.vue -> /+
 
 src/routes/(dashboard)/+layout.vue -> /+
