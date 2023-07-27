@@ -4,12 +4,15 @@ import maxBy from 'lodash.maxby';
 
 import type { PluginOptions } from './types';
 
+type Route = { path: string; component: string; children?: Route[] };
+type Routes = Array<{ route: Route; level: number; key: string }>;
+
 export default async (options?: PluginOptions) => {
-  const routesDir = options?.routesDir || resolve(process.cwd(), 'src/routes');
+  const routesDir = options?.routesDir || resolve(process.cwd(), 'src', 'routes');
 
-  const files = await glob(`${routesDir}/**/+{page,layout}.vue`);
+  const files = await glob(`${routesDir}/**/+{page,layout}.vue`, { posix: true });
 
-  const routes = [] as Array<any>;
+  const routes = [] as Routes;
   const hasRootLayout = files.includes(`${routesDir}/+layout.vue`);
 
   files.forEach((item) => {
@@ -51,28 +54,33 @@ export default async (options?: PluginOptions) => {
     }
   });
 
-  routes.forEach((r) => {
-    if (r.key) {
+  routes.forEach((item) => {
+    if (item.key) {
       routes
-        .filter((_r) => _r.key && Array.isArray(_r.route.children))
-        .forEach((_rr) => {
-          if (r.key.startsWith(_rr.key)) {
-            r.level += 1;
+        .filter((route) => route.key && Array.isArray(route.route.children))
+        .forEach((route) => {
+          if (item.key.startsWith(route.key)) {
+            item.level += 1;
           }
         });
     }
   });
 
-  function createRoutes(routes: any[], level = 0, curArr: any = [], curKeysArr: any = []) {
-    const arr = [] as any;
-    const keysArr = [] as any;
+  function createRoutes(
+    routes: Routes,
+    level = 0,
+    curArr: Route[] = [],
+    curKeysArr: string[] = [],
+  ) {
+    const arr = [] as Route[];
+    const keysArr = [] as string[];
 
     const layouts = routes.filter((r) => Array.isArray(r.route.children));
 
     let maxLevelOfLayouts = 0;
 
     if (layouts.length) {
-      maxLevelOfLayouts = maxBy(layouts, (item: any) => item.level).level - level;
+      maxLevelOfLayouts = Number(maxBy(layouts, (item) => item.level)?.level) - level;
     } else {
       return routes.map((r) => r.route);
     }
@@ -91,7 +99,7 @@ export default async (options?: PluginOptions) => {
     for (let i = 0; i < layoutsMaxLevel.length; i++) {
       const layout = layoutsMaxLevel[i];
 
-      const cur = {} as any;
+      const cur = {} as Route;
       cur.path = layout.route.path;
       cur.component = layout.route.component;
 
