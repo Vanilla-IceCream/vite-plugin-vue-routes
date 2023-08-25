@@ -165,3 +165,7 @@ src/routes/users/[username]/+layout.vue -> /users/:username/+
 ## Documentation
 
 To learn more about `vite-plugin-vue-routes`, check [its documentation](https://vitesheet.onrender.com/vite-plugin-vue-routes/).
+
+## Static Site Generation (SSG)
+
+See [ssg](./ssg).
