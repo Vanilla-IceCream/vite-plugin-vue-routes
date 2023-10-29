@@ -4,7 +4,7 @@ import { test, expect } from 'vitest';
 import generateRoutes from '../generateRoutes';
 
 test('examples', async () => {
-  const routesDir = resolve(__dirname, '../../examples/src/routes');
+  const routesDir = resolve(__dirname, '../../../examples/src/routes');
   const generated = await generateRoutes({ routesDir });
   const routes = generated.replace(new RegExp(routesDir, 'g'), '~/routes');
 

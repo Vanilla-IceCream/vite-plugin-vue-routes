@@ -168,4 +168,4 @@ To learn more about `vite-plugin-vue-routes`, check [its documentation](https://
 
 ## Static Site Generation (SSG)
 
-See [ssg](./ssg).
+See [ssg](./examples/ssg).
