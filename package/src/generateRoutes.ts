@@ -1,3 +1,4 @@
+import os from 'os';
 import { resolve } from 'path';
 import { glob } from 'glob';
 import maxBy from 'lodash.maxby';
@@ -6,6 +7,8 @@ import type { PluginOptions } from './types';
 
 type Route = { path: string; component: string; children?: Route[] };
 type Routes = Array<{ route: Route; level: number; key: string }>;
+
+const isWindows = os.type() === 'Windows_NT';
 
 export default async (options?: PluginOptions) => {
   const routesDir = options?.routesDir || resolve(process.cwd(), 'src', 'routes');
@@ -22,15 +25,24 @@ export default async (options?: PluginOptions) => {
       level += 1;
     }
 
-    const key = item
-      .replace(`${routesDir}`, '')
+    let cur = item;
+    let comp = item;
+
+    if (isWindows) {
+      cur = resolve(process.cwd(), cur).replace(routesDir, '').replace(/\\/g, '/');
+      comp = resolve(process.cwd(), comp);
+    } else {
+      cur = cur.replace(routesDir, '');
+    }
+
+    const key = cur
       .replace('+layout.vue', '')
       .replace('+page.vue', '')
       .split('/')
       .filter(Boolean)
       .join('/');
 
-    let path = item.replace(`${routesDir}`, '').replace('layout.vue', '').replace('/+page.vue', '');
+    let path = cur.replace('layout.vue', '').replace('/+page.vue', '');
 
     // /(group) ->
     path = path.replace(/\/\(.+?\)/g, '');
@@ -45,7 +57,7 @@ export default async (options?: PluginOptions) => {
     // /[id] -> /:id
     path = path.replace(/\[(.+?)\]/g, ':$1');
 
-    const component = `() => import('${item}')`;
+    const component = `() => import('${comp}')`;
 
     if (path.includes('/+')) {
       routes.push({ route: { path, component, children: [] }, level, key });

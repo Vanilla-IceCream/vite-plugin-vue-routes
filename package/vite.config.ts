@@ -9,7 +9,7 @@ export default defineConfig({
       formats: ['es', 'cjs'],
     },
     rollupOptions: {
-      external: ['path', 'glob', 'lodash.maxby'],
+      external: ['os', 'path', 'glob', 'lodash.maxby'],
     },
   },
   plugins: [dts()],
