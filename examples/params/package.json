@@ -6,13 +6,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.3.1",
-    "vue-router": "^4.2.0"
+    "vue": "^3.3.7",
+    "vue-router": "^4.2.5"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^4.2.2",
-    "typescript": "^5.0.4",
-    "vite": "^4.3.5",
+    "@vitejs/plugin-vue": "^4.4.0",
+    "typescript": "^5.2.2",
+    "vite": "^4.5.0",
     "vite-plugin-vue-routes": "workspace:*"
   }
 }
