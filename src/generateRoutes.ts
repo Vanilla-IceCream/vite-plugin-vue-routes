@@ -136,8 +136,25 @@ export default async (options?: PluginOptions) => {
     return createRoutes(routes, level + 1, arr, keysArr);
   }
 
-  const _routes = JSON.stringify(createRoutes(routes), null, 2);
-  const converted = _routes.replace(/"\(\) => import\(/g, '() => import(').replace(/\)"/g, ')');
+  const created = createRoutes(routes);
+
+  const errorFile = await glob(`${routesDir}/+error.vue`, { posix: true });
+
+  if (errorFile?.length) {
+    let comp = errorFile[0];
+
+    if (isWindows) {
+      comp = resolve(process.cwd(), comp);
+    }
+
+    created.push({
+      path: '/:slug(.*)*',
+      component: `() => import('${comp}')`,
+    });
+  }
+
+  const stringified = JSON.stringify(created, null, 2);
+  const converted = stringified.replace(/"\(\) => import\(/g, '() => import(').replace(/\)"/g, ')');
 
   return `export default ${converted};`;
 };

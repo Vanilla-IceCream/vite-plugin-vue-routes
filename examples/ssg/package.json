@@ -7,16 +7,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@unhead/vue": "^1.8.2",
-    "vue": "^3.3.7",
+    "@unhead/vue": "^1.8.8",
+    "vue": "^3.3.9",
     "vue-router": "^4.2.5"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^4.4.0",
+    "@vitejs/plugin-vue": "^4.5.0",
     "critters": "^0.0.20",
-    "typescript": "^5.2.2",
-    "vite": "^4.5.0",
+    "typescript": "^5.3.2",
+    "vite": "^5.0.3",
     "vite-plugin-vue-routes": "workspace:*",
-    "vite-ssg": "^0.23.4"
+    "vite-ssg": "^0.23.5"
   }
 }

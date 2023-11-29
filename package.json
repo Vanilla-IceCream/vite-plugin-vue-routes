@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-vue-routes",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "File-based routing for Vue applications using Vite.",
   "main": "./dist/vite-plugin-vue-routes.cjs",
   "module": "./dist/vite-plugin-vue-routes.js",
@@ -44,13 +44,13 @@
     "lodash.maxby": "^4.6.0"
   },
   "devDependencies": {
-    "@types/lodash.maxby": "^4.6.8",
-    "@vitejs/plugin-vue": "^4.4.0",
+    "@types/lodash.maxby": "^4.6.9",
+    "@vitejs/plugin-vue": "^4.5.0",
     "@vitest/coverage-v8": "^0.34.6",
-    "typescript": "^5.2.2",
-    "vite": "^4.5.0",
+    "typescript": "^5.3.2",
+    "vite": "^5.0.3",
     "vite-plugin-dts": "^3.6.3",
     "vitest": "^0.34.6",
-    "vue": "^3.3.7"
+    "vue": "^3.3.9"
   }
 }

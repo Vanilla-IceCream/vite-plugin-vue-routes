@@ -2,8 +2,6 @@
 
 File-based routing for Vue applications using Vite.
 
-This branch refers to the vite-plugin-vue-routes v1 release. Check out the [v0](https://github.com/Vanilla-IceCream/vite-plugin-vue-routes/tree/v0) branch for v0.
-
 ## Installation
 
 Install `vite-plugin-vue-routes` with your favorite package manager:
@@ -39,6 +37,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '~': resolve(__dirname, 'src'),
+      '@': resolve(__dirname, 'src'),
     },
   },
 });
@@ -81,21 +80,16 @@ import routes from 'virtual:vue-routes';
 
 const router = createRouter({
   history: createWebHistory(),
-  routes: [
-    ...routes,
-
-    {
-      path: '/:slug(.*)*',
-      component: () => import('~/Error.vue'),
-    },
-  ],
+  routes,
   scrollBehavior(to, from, savedPosition) {
-    if (savedPosition) {
-      return savedPosition;
-    }
-
+    if (savedPosition) return savedPosition;
     return { top: 0 };
   },
+});
+
+router.beforeEach((to, from) => {
+  // ...
+  return true;
 });
 
 export default router;
@@ -108,15 +102,15 @@ export default router;
 /// <reference types="vite-plugin-vue-routes/client" />
 ```
 
-## Define Routes
+## Define Pages
 
-Define routes by creating files in the `src/routes` directory:
+Define a page by creating files in the `src/routes` directory:
 
 ```coffee
 src/routes/path/to/+page.vue
 ```
 
-### Route File Naming Convention
+### Page File Naming Convention
 
 The file naming convention for the routes is as follows:
 
@@ -162,10 +156,31 @@ src/routes/(marketing)/+layout.vue -> /+
 src/routes/users/[username]/+layout.vue -> /users/:username/+
 ```
 
+## Define Errors
+
+Define an error page by creating files in the `src/routes` directory:
+
+```coffee
+src/routes/+error.vue
+```
+
+```vue
+<!-- src/routes/+error.vue -->
+<template>
+  <div>Error</div>
+</template>
+```
+
+### Error File Naming Convention
+
+```coffee
+src/routes/+error.vue -> /:slug(.*)*
+```
+
 ## Documentation
 
 To learn more about `vite-plugin-vue-routes`, check [its documentation](https://vitesheet.onrender.com/vite-plugin-vue-routes/).
 
-## Static Site Generation (SSG)
+## Examples
 
-See [ssg](./examples/ssg).
+See [`./examples`](./examples).
