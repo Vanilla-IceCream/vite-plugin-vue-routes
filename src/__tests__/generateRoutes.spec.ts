@@ -72,12 +72,12 @@ test('layouts', async () => {
             "component": () => import('~/routes/(marketing)/+layout.vue'),
             "children": [
               {
-                "path": "/about",
-                "component": () => import('~/routes/(marketing)/about/+page.vue')
-              },
-              {
                 "path": "/",
                 "component": () => import('~/routes/(marketing)/(home)/+page.vue')
+              },
+              {
+                "path": "/about",
+                "component": () => import('~/routes/(marketing)/about/+page.vue')
               }
             ]
           }
@@ -190,12 +190,12 @@ test('params', async () => {
         "component": () => import('~/routes/products/+page.vue')
       },
       {
-        "path": "/hello-world",
-        "component": () => import('~/routes/hello-world/+page.vue')
-      },
-      {
         "path": "/dashboard",
         "component": () => import('~/routes/dashboard/+page.vue')
+      },
+      {
+        "path": "/hello-world",
+        "component": () => import('~/routes/hello-world/+page.vue')
       },
       {
         "path": "/",

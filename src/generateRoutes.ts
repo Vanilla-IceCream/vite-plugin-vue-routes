@@ -115,17 +115,18 @@ export default async (options?: PluginOptions) => {
       cur.path = layout.route.path;
       cur.component = layout.route.component;
 
-      if (curKeysArr.join(',').includes(layout.key)) {
+      if (curKeysArr.filter((ck) => ck.startsWith(layout.key)).length) {
         const sameLayer = routes
           .filter(
-            (r) => r.key.includes(layout.key) && !r.route.children && r.level === maxLevelOfLayouts,
+            (r) =>
+              r.key.startsWith(layout.key) && !r.route.children && r.level === maxLevelOfLayouts,
           )
           .map((r) => r.route);
 
         cur.children = [...curArr, ...sameLayer];
       } else {
         cur.children = routes
-          .filter((r) => r.key.includes(layout.key) && !r.route.children)
+          .filter((r) => r.key.startsWith(layout.key) && !r.route.children)
           .map((r) => r.route);
       }
 
