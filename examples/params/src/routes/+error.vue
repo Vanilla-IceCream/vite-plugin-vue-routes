@@ -6,7 +6,7 @@ const route = useRoute();
 
 <template>
   <fieldset>
-    <legend>Error.vue -> /:slug(.*)*</legend>
+    <legend>/+error.vue -> /:slug(.*)*</legend>
 
     <div>
       route.params:
