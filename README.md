@@ -177,6 +177,31 @@ src/routes/+error.vue
 src/routes/+error.vue -> /:slug(.*)*
 ```
 
+### Resource Prefetching
+
+```ts
+// vite.config.ts
+import { resolve } from 'path';
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import vueRoutes from 'vite-plugin-vue-routes';
+import prefetchChunk from 'vite-plugin-prefetch-chunk';
+
+export default defineConfig({
+  plugins: [
+    vue(),
+    vueRoutes(),
+    prefetchChunk(), // Integrate with this plugin
+  ],
+  resolve: {
+    alias: {
+      '~': resolve(__dirname, 'src'),
+      '@': resolve(__dirname, 'src'),
+    },
+  },
+});
+```
+
 ## Documentation
 
 To learn more about `vite-plugin-vue-routes`, check [its documentation](https://vitesheet.onrender.com/vite-plugin-vue-routes/).

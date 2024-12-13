@@ -57,7 +57,7 @@ export default async (options?: PluginOptions) => {
     // /[id] -> /:id
     path = path.replace(/\[(.+?)\]/g, ':$1');
 
-    const component = `() => import('${comp}')`;
+    const component = `() => import('${comp}?prefetch')`;
 
     if (path.includes('/+')) {
       routes.push({ route: { path, component, children: [] }, level, key });
@@ -150,7 +150,7 @@ export default async (options?: PluginOptions) => {
 
     created.push({
       path: '/:slug(.*)*',
-      component: `() => import('${comp}')`,
+      component: `() => import('${comp}?prefetch')`,
     });
   }
 
