@@ -17,13 +17,15 @@ export default function vueRoutes(options?: PluginOptions): Plugin {
       return null;
     },
     configureServer(server) {
-      server.watcher.on('add', async (filePath) => {
-        if (['+page.vue', '+layout.vue'].includes(path.basename(filePath))) server.restart();
-      });
+      const targetFiles = new Set(['+page.vue', '+layout.vue', '+error.vue']);
+      const shouldRestart = (filePath: string) => targetFiles.has(path.basename(filePath));
 
-      server.watcher.on('unlink', async (filePath) => {
-        if (['+page.vue', '+layout.vue'].includes(path.basename(filePath))) server.restart();
-      });
+      const restartIfNecessary = (filePath: string) => {
+        if (shouldRestart(filePath)) server.restart();
+      };
+
+      server.watcher.on('add', restartIfNecessary);
+      server.watcher.on('unlink', restartIfNecessary);
     },
   };
 }
