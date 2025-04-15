@@ -1,5 +1,5 @@
 import os from 'os';
-import { resolve } from 'path';
+import { resolve, join } from 'path';
 import { glob } from 'glob';
 import maxBy from 'lodash.maxby';
 
@@ -16,7 +16,11 @@ export default async (options?: PluginOptions) => {
   const files = await glob(`${routesDir}/**/+{page,layout}.vue`, { posix: true });
 
   const routes = [] as Routes;
-  const hasRootLayout = files.includes(`${routesDir}/+layout.vue`);
+  const hasRootLayout = files.includes(
+    `${
+      isWindows ? routesDir.replace(join(process.cwd(), '/'), '').replace(/\\/g, '/') : routesDir
+    }/+layout.vue`,
+  );
 
   files.forEach((item) => {
     let level = 0;
